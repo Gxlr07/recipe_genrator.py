@@ -1,9 +1,10 @@
 import tkinter as tk
 from tkinter import scrolledtext
-import openai
+import cohere
 
-# Replace 'your-api-key' with your actual OpenAI API key
-openai.api_key = 'your-api-key'
+# Replace 'your-api-key' with your actual Cohere API key
+cohere_api_key = 'ni-api-key'
+co = cohere.Client(cohere_api_key)
 
 def generate_recipe():
     meal_type = meal_type_entry.get()
@@ -19,12 +20,12 @@ def generate_recipe():
     )
 
     try:
-        response = openai.Completion.create(
-            engine="text-davinci-003",
-            prompt=prompt,
+        response = co.chat(
+            model='command-light-nightly',
+            message=prompt,
             max_tokens=500
         )
-        recipe = response.choices[0].text.strip()
+        recipe = response.text.strip()
         result_text.delete(1.0, tk.END)
         result_text.insert(tk.END, recipe)
     except Exception as e:
